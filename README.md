@@ -1,2 +1,2 @@
-# SQL-Projects
-This repository contains SQL scripts I have completed. The prompts for each project come from SQL and Database courses I have taken as well as challenge problems I have found online as a way to continue working on my skill with SQL.
+# Madison Bochard's SQL Portfolio
+Welcome! This repository contains examples of SQL code I have written. Take your time browsing this portfolio, and feel free to reach out if you have any questions.
