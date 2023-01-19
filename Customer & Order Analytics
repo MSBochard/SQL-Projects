@@ -54,3 +54,10 @@ JOIN BIT_DB.customers AS C
 ON FS.orderID = C.order_id
 WHERE FS.Quantity > 2 AND FS.orderID IS NOT NULL
 AND FS.orderID <> '' AND LENGTH(FS.orderID) = 6;
+
+-- List all the products sold in Los Angeles in February, and include how many of each were sold.
+
+SELECT Product, SUM(Quantity)
+FROM BIT_DB.FebSales
+WHERE location LIKE '%Los Angeles%'
+GROUP BY Product;
