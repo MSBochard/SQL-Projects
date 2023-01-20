@@ -40,7 +40,7 @@ ORDER BY Product;
 
 -- Which products were sold in February at 548 Lincoln St, Seattle, WA 98101, how many of each were sold, and what was the total revenue?
 
-SELECT Product, SUM(Quantity), (SUM(Quantity) * price) AS Revenue
+SELECT Product, SUM(Quantity) AS Quantity, (SUM(Quantity) * price) AS Revenue
 FROM BIT_DB.FebSales
 WHERE location = '548 Lincoln St, Seattle, WA 98101'
 AND Product IS NOT NULL AND Product <> '' AND Product <> 'Product'
@@ -50,14 +50,54 @@ GROUP BY Product;
 
 SELECT COUNT(DISTINCT C.acctnum) AS total_customers , AVG(FS.Quantity * FS.price) AS avg_spent
 FROM BIT_DB.FebSales AS FS
-JOIN BIT_DB.customers AS C
+INNER JOIN BIT_DB.customers AS C
 ON FS.orderID = C.order_id
 WHERE FS.Quantity > 2 AND FS.orderID IS NOT NULL
 AND FS.orderID <> '' AND LENGTH(FS.orderID) = 6;
 
 -- List all the products sold in Los Angeles in February, and include how many of each were sold.
 
-SELECT Product, SUM(Quantity)
+SELECT Product, SUM(Quantity) AS Quantity
 FROM BIT_DB.FebSales
 WHERE location LIKE '%Los Angeles%'
 GROUP BY Product;
+
+-- Which locations in New York state received at least 3 orders in January, and how many orders did they each receive?
+
+SELECT DISTINCT location, COUNT(orderID) AS total_orders
+FROM BIT_DB.JanSales
+WHERE location LIKE '%NY%' AND LENGTH(orderID) = 6
+GROUP BY location
+HAVING total_orders >= 3;
+
+-- How many of each type of headphone were sold in February?
+
+SELECT Product, SUM(Quantity) AS Quantity
+FROM BIT_DB.FebSales
+WHERE Product LIKE '%Headphone%'
+GROUP BY Product;
+
+-- What was the average amount spent per account in February? 
+
+SELECT AVG(FS.Quantity * FS.price) AS AVG_Spent_Per_Acct
+FROM BIT_DB.FebSales AS FS
+JOIN BIT_DB.customers AS C
+ON FS.orderID = C.order_id
+WHERE LENGTH(FS.orderID) = 6;
+
+-- What was the average quantity of products purchased per account in February?
+
+SELECT SUM(FS.Quantity) / COUNT(C.acctnum) AS Avg_Quantity_Per_Acct
+FROM BIT_DB.FebSales AS FS
+JOIN BIT_DB.customers AS C
+ON FS.orderID = C.order_id
+WHERE LENGTH(FS.orderID) = 6;
+
+-- Which product brought in the most revenue in January and how much revenue did it bring in total?
+
+SELECT Product, SUM(Quantity * price) AS Revenue
+FROM BIT_DB.JanSales
+WHERE Product IS NOT NULL AND Product <> '' AND Product <> 'Product'
+GROUP BY Product
+ORDER BY Revenue DESC
+LIMIT 1;
