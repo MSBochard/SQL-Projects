@@ -101,3 +101,14 @@ WHERE Product IS NOT NULL AND Product <> '' AND Product <> 'Product'
 GROUP BY Product
 ORDER BY Revenue DESC
 LIMIT 1;
+
+-- Create a list of all accounts that made orders in February and include a count of each order per product, quantity, price, order date, and location.
+
+SELECT c.acctnum, COUNT(fs.orderID) AS Orders, fs.Product, fs.Quantity,
+    fs.price, fs.orderdate, fs.location
+FROM BIT_DB.FebSales AS fs
+INNER JOIN BIT_DB.customers AS c
+ON fs.orderID = c.order_id
+WHERE fs.Product <> 'Product'
+GROUP BY c.acctnum, fs.Product, fs.Quantity,
+    fs.price, fs.orderdate, fs.location;
